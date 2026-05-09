@@ -8,11 +8,12 @@ import Services from '@/components/Home/Services'
 import Marquee from '@/components/Home/Marquee'
 import LegacyCards from '@/components/Home/LegacyCards'
 import Insights from '@/components/Home/Insights'
+import ReadyToRise from '@/components/Home/ReadyToRise'
 import Footer from '@/components/Home/Footer'
 
 export default function HomePage() {
   return (
-    <main className="min-h-screen bg-[#e7e6e0] text-white overflow-hidden">
+    <main className="min-h-screen bg-[#e7e6e0] text-white overflow-x-hidden">
       <Navbar />
       <Hero />
       <SocialProof />
@@ -22,6 +23,7 @@ export default function HomePage() {
       <Marquee />
       <LegacyCards />
       <Insights />
+      <ReadyToRise />
       <Footer />
     </main>
   )

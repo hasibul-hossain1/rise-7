@@ -22,3 +22,7 @@ body {
   color: var(--foreground);
   font-family: inherit;
 }
+
+.social-proof-swiper .swiper-wrapper {
+  transition-timing-function: linear !important;
+}

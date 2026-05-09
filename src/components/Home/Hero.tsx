@@ -4,9 +4,10 @@ import gsap from 'gsap'
 import { useEffect, useRef } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
-import { Logo } from '../icons'
+import { LeftPaddy, Logo, RightPaddy } from '../icons'
 import heroImage from '@/assets/hero-image.webp'
 import { ArrowUpRight } from 'lucide-react'
+import MobileMenu from './MobileMenu'
 
 const platformLogos = [
   'Google',
@@ -23,41 +24,23 @@ const platformLogos = [
 const Badge = () => (
   <div className="flex items-center gap-6 text-white/90">
     {/* Left Laurel */}
-    <svg width="32" height="48" viewBox="0 0 32 48" fill="none" className="opacity-80">
-      <path d="M28 4C24 8 20 14 20 24C20 34 24 40 28 44" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
-      <path d="M12 10C8 14 6 18 6 24C6 30 8 34 12 38" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" opacity="0.6" />
-      <path d="M18 6L20 8" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
-      <path d="M14 12L16 14" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
-      <path d="M12 20L14 22" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
-      <path d="M12 28L14 26" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
-      <path d="M14 36L16 34" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
-      <path d="M18 42L20 40" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
-    </svg>
 
     <div className="flex flex-col items-center">
       <p className="max-w-[180px] text-[10px] font-black uppercase tracking-[0.2em] leading-tight text-center opacity-70">
         #1 Most recommended content marketing agency
       </p>
-      <div className="mt-4 flex items-center gap-2">
-        {['GLOBAL SEARCH AWARDS', 'THE DRUM', 'UK SOCIAL', 'CONTENT AWARDS'].map((award) => (
-          <div key={award} className="flex items-center gap-1.5 rounded-sm border border-white/20 bg-white/5 px-2.5 py-1 backdrop-blur-md">
-            <span className="text-[9px] font-black uppercase tracking-tighter whitespace-nowrap">{award}</span>
-          </div>
-        ))}
+      <div className="mt-4 flex items-center gap-4">
+        <LeftPaddy />
+        <div className="flex items-center gap-2">
+          {['GLOBAL SEARCH AWARDS', 'THE DRUM', 'UK SOCIAL', 'CONTENT AWARDS'].map((award) => (
+            <div key={award} className="flex items-center gap-1.5 rounded-sm border border-white/20 bg-white/5 px-2.5 py-1 backdrop-blur-md">
+              <span className="text-[9px] font-black uppercase tracking-tighter whitespace-nowrap text-white/90">{award}</span>
+            </div>
+          ))}
+        </div>
+        <RightPaddy />
       </div>
     </div>
-
-    {/* Right Laurel */}
-    <svg width="32" height="48" viewBox="0 0 32 48" fill="none" className="opacity-80 rotate-180">
-      <path d="M28 4C24 8 20 14 20 24C20 34 24 40 28 44" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
-      <path d="M12 10C8 14 6 18 6 24C6 30 8 34 12 38" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" opacity="0.6" />
-      <path d="M18 6L20 8" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
-      <path d="M14 12L16 14" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
-      <path d="M12 20L14 22" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
-      <path d="M12 28L14 26" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
-      <path d="M14 36L16 34" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
-      <path d="M18 42L20 40" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
-    </svg>
   </div>
 )
 
@@ -114,7 +97,7 @@ export default function Hero() {
         Where are your customers actually searching? Download the report
       </a>
 
-      <div className="relative min-h-[calc(100vh-56px)] overflow-hidden rounded-[26px] bg-[#111212] px-2 pb-8 pt-28 sm:px-4 lg:px-6">
+      <div className="relative min-h-[calc(100vh-56px)] overflow-hidden rounded-[26px] bg-[#111212] px-2 pb-8 pt-20 lg:pt-28 sm:px-4 lg:px-6">
         {/* Navigation Wrapper */}
         <nav data-hero-nav className="absolute left-0 right-0 top-0 z-50 flex items-center justify-between px-2 pt-4 sm:px-10 lg:px-8">
           <Link href="/" className="flex shrink-0 items-center">
@@ -143,7 +126,7 @@ export default function Hero() {
             onFocus={() => morphCta(true)}
             onPointerEnter={() => morphCta(true)}
             onPointerLeave={() => morphCta(false)}
-            className="group inline-flex h-11 shrink-0 items-center justify-center gap-2 overflow-hidden rounded-[24px] bg-white px-6 text-[14px] font-bold text-[#111212] transform-[translateZ(0)] will-change-[border-radius] transition-all"
+            className="group hidden lg:inline-flex h-11 shrink-0 items-center justify-center gap-2 overflow-hidden rounded-[24px] bg-white px-6 text-[14px] font-bold text-[#111212] transform-[translateZ(0)] will-change-[border-radius] transition-all"
           >
             <span className="relative inline-block h-[1.1em] overflow-hidden whitespace-nowrap leading-none">
               <span className="flex flex-col transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:-translate-y-1/2">
@@ -158,6 +141,9 @@ export default function Hero() {
               </span>
             </span>
           </Link>
+
+          {/* Mobile Hamburger Menu */}
+          <MobileMenu />
         </nav>
 
         {/* Background Layer */}
@@ -178,21 +164,21 @@ export default function Hero() {
 
         {/* Hero Content */}
         <div className="relative z-10 flex min-h-[calc(100vh-200px)] flex-col justify-between">
-          <div className="flex flex-1 flex-col items-center justify-center pt-10 text-center">
+          <div className="flex flex-1 flex-col items-center justify-center pt-8 lg:pt-10 text-center">
             {/* Awards Badge */}
-            <div data-hero-reveal className="mb-12">
+            <div data-hero-reveal className="mb-8 lg:mb-12">
               <Badge />
             </div>
 
             {/* Main Headline */}
             <h1
               data-hero-reveal
-              className="flex max-w-7xl flex-col items-center text-[clamp(2.8rem,10.5vw,9rem)] font-black leading-[0.85] tracking-[-0.04em] text-white"
+              className="flex max-w-8xl flex-col items-center text-[clamp(2.8rem,10.5vw,9rem)] font-black leading-[0.85] tracking-[-0.04em] text-white"
             >
               <span className="block">We Create</span>
               <span className="flex flex-wrap items-center justify-center gap-x-3 gap-y-1 px-4 text-center sm:gap-x-4 sm:gap-y-2">
                 <span>Category</span>
-                <span className="relative inline-flex h-[0.7em] w-[0.9em] shrink-0 overflow-hidden rounded-[18px] shadow-2xl shadow-black/50 sm:rounded-[32px] lg:rounded-[40px]">
+                <span className="relative inline-flex h-[0.9em] w-[1.2em] sm:w-[0.9em] shrink-0 overflow-hidden rounded-[18px] shadow-2xl shadow-black/50 sm:rounded-[32px] lg:rounded-[40px]">
                   <Image
                     src={heroImage}
                     alt="Red Bull"
@@ -212,7 +198,7 @@ export default function Hero() {
             {/* Platform Logos */}
             <div
               data-hero-reveal
-              className="mt-16 flex flex-wrap items-center justify-center gap-x-10 gap-y-6 px-4"
+              className="mt-10 lg:mt-16 flex flex-wrap items-center justify-center gap-x-8 gap-y-5 lg:gap-x-10 lg:gap-y-6 px-4"
             >
               {platformLogos.map((logo) => (
                 <span key={logo} className="text-sm font-black uppercase tracking-widest text-white/60 transition-colors hover:text-white">
@@ -225,7 +211,7 @@ export default function Hero() {
           {/* Bottom Info */}
           <div
             data-hero-reveal
-            className="mt-16 grid gap-8 border-t border-white/10 pt-8 text-[15px] font-bold leading-snug text-white/80 md:grid-cols-2"
+            className="mt-10 lg:mt-16 grid gap-6 lg:gap-8 border-t border-white/10 pt-6 lg:pt-8 text-[15px] font-bold leading-snug text-white/80 md:grid-cols-2"
           >
             <p className="max-w-md">
               Organic media planners creating, distributing & optimising search-first content for SEO, Social, PR, Ai and LLM search

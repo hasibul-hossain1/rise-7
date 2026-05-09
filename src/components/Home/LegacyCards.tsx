@@ -3,72 +3,93 @@
 import { useEffect, useRef } from 'react'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import Image from 'next/image'
+import Link from 'next/link'
+import { ArrowUpRight } from 'lucide-react'
 
 gsap.registerPlugin(ScrollTrigger)
 
 const cards = [
     {
         title: 'Pioneers',
-        description: 'We don\'t follow best practice, we create it. Our strategies are built to dominate search engines and social platforms.',
+        description: 'We\'re dedicated to creating the industry narrative that others\nfollow 3 years from now. We paved the path for creative\nSEO, multi-channel search with Digital PR, and Social Search and\nwe will continue to do it.\n\nWe\'re on a mission to be the first search-first agency to win a\nCannes Lion disrupting the status quo.',
         color: 'bg-[#111212]',
-        textColor: 'text-white'
+        textColor: 'text-white',
+        image: '/pioneers.png',
+        rotation: 4
     },
     {
-        title: 'Award Winning',
-        description: 'Recognised globally for our innovative approach to search-first content marketing and digital PR campaigns.',
+        title: 'Award\nWinning',
+        description: 'A roll top bath full of 79 awards. Voted The Drum\'s best\nagency outside of London. We are official judges for industry\nawards including Global Search Awards and Global Content\nMarketing Awards.',
         color: 'bg-[#b4f3df]',
-        textColor: 'text-[#111212]'
+        textColor: 'text-[#111212]',
+        image: '/award.png',
+        rotation: -4
     },
     {
         title: 'Speed',
-        description: 'We move at the speed of culture. Reacting to trends before they peak, putting our clients at the forefront of the conversation.',
-        color: 'bg-[#718494]',
-        textColor: 'text-white'
+        description: 'People ask us why we are called Rise at Seven? Ever heard the\nsaying Early Bird catches the worm? Google is moving fast, but\nhumans are moving faster. We chase consumers, not algorithms.\nWe\'ve created a service which takes ideas to result within\n60 minutes.',
+        color: 'bg-[#ffffff]',
+        textColor: 'text-[#111212]',
+        image: '/speed.png',
+        rotation: 3
     }
 ]
 
 export default function LegacyCards() {
     const containerRef = useRef<HTMLElement>(null)
     const cardsWrapperRef = useRef<HTMLDivElement>(null)
+    const ctaRef = useRef<HTMLAnchorElement>(null)
+
+    const morphCta = (isActive: boolean) => {
+        const cta = ctaRef.current
+        if (!cta) return
+        const pillRadius = window.matchMedia('(min-width: 640px)').matches ? 28 : 24
+        gsap.to(cta, {
+            borderRadius: isActive ? 14 : pillRadius,
+            duration: 0.72,
+            ease: 'power4.out',
+            overwrite: 'auto',
+        })
+    }
 
     useEffect(() => {
         const container = containerRef.current
         const cardsWrapper = cardsWrapperRef.current
-        
+
         if (!container || !cardsWrapper) return
 
         const cardElements = gsap.utils.toArray<HTMLElement>('.legacy-card')
-        
+
         if (cardElements.length === 0) return
 
         const ctx = gsap.context(() => {
-            // Pin the container
-            ScrollTrigger.create({
-                trigger: container,
-                start: 'top top',
-                end: `+=${cardElements.length * 100}%`,
-                pin: true,
-                pinSpacing: true,
+            // Initial setting for rotation
+            cardElements.forEach((card, index) => {
+                gsap.set(card, { rotation: cards[index].rotation })
             })
 
-            // Animate cards stacking
-            cardElements.forEach((card, index) => {
-                if (index === 0) return 
+            // Create a main timeline that pins the section and drives animations sequentially
+            const tl = gsap.timeline({
+                scrollTrigger: {
+                    trigger: container,
+                    start: 'top top',
+                    end: `+=${(cardElements.length - 1) * 100}%`,
+                    scrub: 1,
+                    pin: true,
+                }
+            })
 
-                gsap.fromTo(card, 
-                    { y: '100vh', scale: 1 },
-                    {
-                        y: `${index * 32}px`, 
-                        scale: 1 - (index * 0.04), 
-                        ease: 'none',
-                        scrollTrigger: {
-                            trigger: container,
-                            start: `top+=${(index - 0.5) * 100}% top`,
-                            end: `top+=${index * 100}% top`,
-                            scrub: 1,
-                        }
-                    }
-                )
+            // Animate cards moving UP and OUT sequentially
+            cardElements.forEach((card, index) => {
+                // The last card stays in place
+                if (index === cardElements.length - 1) return
+
+                tl.to(card, {
+                    y: '-150vh',
+                    rotation: cards[index].rotation * 2, // Exaggerate rotation slightly as it moves out
+                    ease: 'none',
+                })
             })
 
         }, container)
@@ -77,40 +98,39 @@ export default function LegacyCards() {
     }, [])
 
     return (
-        <section ref={containerRef} className="bg-[#e7e6e0] min-h-screen relative overflow-hidden flex items-center justify-center -mt-10 pt-20">
-            <div className="absolute top-20 left-10 md:left-20 z-10">
-                <h2 className="text-[clamp(2.5rem,5vw,4rem)] font-black text-[#111212] leading-none uppercase tracking-tighter">
-                    A Legacy <br />In The Making
+        <section ref={containerRef} className="bg-[#e7e6e0] min-h-screen relative overflow-hidden flex items-center justify-center">
+            {/* Top tiny heading and V shape */}
+            <div className="absolute top-8 left-1/2 -translate-x-1/2 z-10 text-center flex flex-col items-center">
+                {/* <div className="w-20 h-20 bg-[#111212] rotate-45 -translate-y-16 rounded-sm absolute" /> */}
+                <h2 className="font-bold text-[#111212] font-sans tracking-tight relative mt-4 whitespace-nowrap">
+                    A Legacy In The Making
                 </h2>
             </div>
 
-            <div ref={cardsWrapperRef} className="relative w-full max-w-4xl mx-auto px-5 h-[60vh] md:h-[70vh] flex items-center justify-center mt-20">
+            <div ref={cardsWrapperRef} className="relative w-[90vw] max-w-[550px] h-[65vh] min-h-[550px] flex items-center justify-center mt-12">
                 {cards.map((card, index) => (
-                    <div 
-                        key={index} 
-                        className={`legacy-card absolute top-0 left-0 w-full h-full rounded-[40px] p-10 md:p-16 flex flex-col justify-between ${card.color} ${card.textColor} shadow-2xl origin-top`}
-                        style={{ zIndex: index + 1 }}
+                    <div
+                        key={index}
+                        className={`legacy-card absolute top-0 left-0 w-full h-full rounded-[40px] p-8 md:p-12 flex flex-col items-center justify-center text-center ${card.color} ${card.textColor} shadow-2xl origin-center`}
+                        style={{ zIndex: cards.length - index }}
                     >
-                        <div>
-                            <span className="text-xl md:text-2xl font-bold opacity-60">0{index + 1}</span>
-                            <h3 className="mt-4 text-[clamp(3rem,6vw,6rem)] font-black leading-[0.9] tracking-tighter uppercase">
-                                {card.title}
-                            </h3>
+                        <div className="w-32 h-32 md:w-40 md:h-40 rounded-2xl overflow-hidden mb-6 flex-shrink-0 relative shadow-lg">
+                            <Image
+                                src={card.image}
+                                alt={card.title}
+                                fill
+                                className="object-cover"
+                                sizes="(max-width: 768px) 128px, 160px"
+                            />
                         </div>
-                        <p className="max-w-xl text-lg md:text-2xl font-bold leading-tight">
+                        <h3 className="text-[clamp(3.5rem,6vw,5rem)] font-black leading-[0.9] tracking-tighter mb-6 whitespace-pre-line">
+                            {card.title}
+                        </h3>
+                        <p className="max-w-[400px] text-sm md:text-base font-medium leading-snug whitespace-pre-line px-2">
                             {card.description}
                         </p>
                     </div>
                 ))}
-            </div>
-            
-            <div className="absolute bottom-10 right-10 md:right-20 z-50">
-                <a href="/contact" className="group inline-flex items-center justify-center px-8 py-4 bg-transparent border-2 border-black rounded-full text-black font-bold text-lg overflow-hidden transition-colors hover:text-white">
-                    <span className="absolute inset-0 bg-black translate-y-[100%] rounded-full transition-transform duration-300 ease-out group-hover:translate-y-0"></span>
-                    <span className="relative z-10 flex items-center gap-2">
-                        Send Us Your Brief <span className="transition-transform group-hover:translate-x-1">→</span>
-                    </span>
-                </a>
             </div>
         </section>
     )

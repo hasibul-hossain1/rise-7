@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { useEffect, useRef } from 'react'
 import { ArrowUpRight } from 'lucide-react'
 import { Logo } from '../icons'
+import MobileMenu from './MobileMenu'
 
 const navItems = [
     { label: 'Services +', href: '/services' },
@@ -140,7 +141,7 @@ export default function Navbar() {
                     onFocus={() => morphCta(true)}
                     onPointerEnter={() => morphCta(true)}
                     onPointerLeave={() => morphCta(false)}
-                    className="group inline-flex h-11 shrink-0 items-center justify-center gap-2 overflow-hidden rounded-[22px] bg-[#111212] px-5 text-sm font-bold text-white [transform:translateZ(0)] [will-change:border-radius] sm:h-12 sm:rounded-[24px] sm:px-7"
+                    className="group hidden lg:inline-flex h-11 shrink-0 items-center justify-center gap-2 overflow-hidden rounded-[22px] bg-[#111212] px-5 text-sm font-bold text-white [transform:translateZ(0)] [will-change:border-radius] sm:h-12 sm:rounded-[24px] sm:px-7"
                 >
                     <span className="relative inline-block h-[1.1em] overflow-hidden whitespace-nowrap leading-none sm:hidden">
                         <span className="flex flex-col transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:-translate-y-1/2">
@@ -167,6 +168,9 @@ export default function Navbar() {
                         </span>
                     </span>
                 </Link>
+
+                {/* Mobile Hamburger Menu */}
+                <MobileMenu />
             </nav>
         </header>
     )

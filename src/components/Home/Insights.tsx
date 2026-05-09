@@ -3,26 +3,30 @@
 import { useEffect, useRef } from 'react'
 import gsap from 'gsap'
 import Image from 'next/image'
+import Link from 'next/link'
+import { ArrowUpRight } from 'lucide-react'
 
 const articles = [
     {
-        category: 'Insights',
-        title: 'The future of search is here, and it\'s not Google',
-        date: '12 Oct 2023',
-        image: 'https://rise-atseven.transforms.svdcdn.com/production/images/google-sge-header.png?auto=format&dm=1750948726&fit=crop&q=100&w=800',
-        featured: true
+        author: 'Ray Saddiq',
+        readTime: '3 mins',
+        title: 'Rise at Seven Appoints Hollie Lovell as Senior Operations Lead',
+        image: '/insight_card_1.png',
+        badge: null
     },
     {
-        category: 'News',
-        title: 'Rise at Seven named Content Marketing Agency of the Year',
-        date: '05 Sep 2023',
-        image: 'https://rise-atseven.transforms.svdcdn.com/production/images/awards-win.jpg?auto=format&dm=1750948726&fit=crop&q=100&w=800'
+        author: 'Ray Saddiq',
+        readTime: '2 mins',
+        title: 'Rise at Seven Exits Sheffield and Triples Manchester as new HQ as they go for global expansion',
+        image: '/insight_card_2.png',
+        badge: null
     },
     {
-        category: 'Insights',
-        title: 'How to build a reactive PR strategy that actually works',
-        date: '28 Aug 2023',
-        image: 'https://rise-atseven.transforms.svdcdn.com/production/images/reactive-pr.jpg?auto=format&dm=1750948726&fit=crop&q=100&w=800'
+        author: 'Carrie Rose',
+        readTime: '2 mins',
+        title: 'Ryan McNamara Is Now Rise at Seven\'s Global Operations Director',
+        image: '/insight_card_3.png',
+        badge: 'News'
     }
 ]
 
@@ -30,6 +34,18 @@ export default function Insights() {
     const sectionRef = useRef<HTMLElement>(null)
     const headerRef = useRef<HTMLDivElement>(null)
     const gridRef = useRef<HTMLDivElement>(null)
+    const ctaRef = useRef<HTMLAnchorElement>(null)
+
+    const morphCta = (e: React.PointerEvent<HTMLAnchorElement> | React.FocusEvent<HTMLAnchorElement>, isActive: boolean) => {
+        const cta = e.currentTarget
+        const pillRadius = window.matchMedia('(min-width: 640px)').matches ? 24 : 20
+        gsap.to(cta, {
+            borderRadius: isActive ? 12 : pillRadius,
+            duration: 0.72,
+            ease: 'power4.out',
+            overwrite: 'auto',
+        })
+    }
 
     useEffect(() => {
         const section = sectionRef.current
@@ -66,100 +82,106 @@ export default function Insights() {
         return () => ctx.revert()
     }, [])
 
-    const featuredArticle = articles.find(a => a.featured)
-    const standardArticles = articles.filter(a => !a.featured)
-
     return (
-        <section ref={sectionRef} className="bg-[#e7e6e0] text-[#111212] py-32 rounded-t-[40px] relative z-20 -mt-10">
+        <section ref={sectionRef} className="bg-[#e7e6e0] text-[#111212] pt-20 pb-32 relative z-20">
             <div className="mx-auto max-w-[1880px] px-5 sm:px-8 lg:px-12">
                 
-                <div ref={headerRef} className="flex flex-col md:flex-row justify-between items-end mb-16 gap-8">
-                    <h2 className="text-[clamp(3.5rem,6vw,6rem)] font-black leading-none tracking-tighter uppercase">
-                        Insights &<br />News
+                {/* Header Area */}
+                <div 
+                    ref={headerRef} 
+                    className="flex flex-col md:flex-row justify-between items-start md:items-center py-6 md:py-8 border-t border-b border-black/10 mb-12 gap-6"
+                >
+                    <h2 className="text-[clamp(4rem,8vw,8rem)] font-medium leading-[0.8] tracking-tighter flex items-center flex-wrap">
+                        What&apos;s
+                        <span className="w-[60px] h-[60px] md:w-[100px] md:h-[100px] rounded-[16px] md:rounded-[24px] overflow-hidden relative shrink-0 mx-2 md:mx-4 inline-block align-middle transform -translate-y-1 md:-translate-y-2 shadow-md">
+                            <Image 
+                                src="/header_whats_new.png" 
+                                alt="What's New" 
+                                fill 
+                                className="object-cover" 
+                                sizes="(max-width: 768px) 60px, 100px"
+                            />
+                        </span>
+                        New
                     </h2>
-                    <a href="/blog" className="group flex items-center gap-2 text-xl font-bold border-b-2 border-black pb-1 hover:text-black/60 hover:border-black/60 transition-colors">
-                        View All <span className="transition-transform group-hover:translate-x-1">→</span>
-                    </a>
+                    
+                    <div className="shrink-0 pt-2 md:pt-0">
+                        <Link
+                            ref={ctaRef}
+                            href="/blog"
+                            onBlur={(e) => morphCta(e, false)}
+                            onFocus={(e) => morphCta(e, true)}
+                            onPointerEnter={(e) => morphCta(e, true)}
+                            onPointerLeave={(e) => morphCta(e, false)}
+                            className="group inline-flex h-10 sm:h-12 shrink-0 items-center justify-center gap-2 overflow-hidden rounded-[20px] sm:rounded-[24px] bg-white px-5 sm:px-6 text-[13px] sm:text-sm font-bold text-[#111212] [transform:translateZ(0)] [will-change:border-radius] shadow-sm"
+                        >
+                            <span className="relative inline-block h-[1.1em] overflow-hidden whitespace-nowrap leading-none">
+                                <span className="flex flex-col transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:-translate-y-1/2">
+                                    <span className="flex items-center gap-1.5">
+                                        <span>Explore More Thoughts</span>
+                                        <ArrowUpRight size={14} className="stroke-[3]" />
+                                    </span>
+                                    <span className="flex items-center gap-1.5">
+                                        <span>Explore More Thoughts</span>
+                                        <ArrowUpRight size={14} className="stroke-[3]" />
+                                    </span>
+                                </span>
+                            </span>
+                        </Link>
+                    </div>
                 </div>
 
-                <div ref={gridRef} className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-                    
-                    {/* Featured Article */}
-                    {featuredArticle && (
-                        <a href="/blog/future-of-search" className="group col-span-1 lg:col-span-7 flex flex-col cursor-pointer">
-                            <div className="relative w-full aspect-[4/3] rounded-[32px] overflow-hidden mb-6">
+                {/* Cards Grid */}
+                <div ref={gridRef} className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
+                    {articles.map((article, i) => (
+                        <a key={i} href="/blog/article" className="group flex flex-col cursor-pointer">
+                            <div className="relative w-full aspect-square md:aspect-[4/5] rounded-[24px] md:rounded-[32px] overflow-hidden mb-5">
                                 <Image 
-                                    src={featuredArticle.image} 
-                                    alt={featuredArticle.title}
-                                    width={800}
-                                    height={600}
-                                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                                    unoptimized
+                                    src={article.image} 
+                                    alt={article.title}
+                                    fill
+                                    className="object-cover transition-transform duration-700 group-hover:scale-105"
+                                    sizes="(max-width: 768px) 100vw, 33vw"
                                 />
-                                <div className="absolute top-6 left-6 bg-white px-4 py-2 rounded-full text-xs font-bold uppercase tracking-widest">
-                                    {featuredArticle.category}
-                                </div>
+                                {article.badge && (
+                                    <div className="absolute top-5 left-5 bg-black/40 backdrop-blur-md px-3 py-1.5 rounded-full text-[11px] font-bold uppercase tracking-widest text-white">
+                                        {article.badge}
+                                    </div>
+                                )}
                             </div>
-                            <div className="flex items-center gap-4 text-black/60 font-bold mb-3">
-                                <span>{featuredArticle.date}</span>
-                            </div>
-                            <h3 className="text-[clamp(2rem,3vw,3rem)] font-black leading-tight tracking-tight group-hover:underline decoration-4 underline-offset-4">
-                                {featuredArticle.title}
-                            </h3>
-                        </a>
-                    )}
-
-                    {/* Secondary Column */}
-                    <div className="col-span-1 lg:col-span-5 flex flex-col gap-12">
-                        {/* Articles */}
-                        <div className="flex flex-col gap-8">
-                            {standardArticles.map((article, i) => (
-                                <a key={i} href="/blog/article" className="group flex gap-6 items-center cursor-pointer">
-                                    <div className="relative w-1/3 aspect-square rounded-[24px] overflow-hidden shrink-0">
+                            
+                            {/* Meta info */}
+                            <div className="flex items-center gap-3 mb-3">
+                                <div className="bg-white rounded-full px-3 py-1.5 flex items-center gap-2 shadow-sm shrink-0">
+                                    <div className="w-4 h-4 rounded-full overflow-hidden relative">
                                         <Image 
-                                            src={article.image} 
-                                            alt={article.title}
-                                            width={400}
-                                            height={400}
-                                            className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                                            src={`https://ui-avatars.com/api/?name=${article.author.replace(' ', '+')}&background=random&color=fff&size=64`}
+                                            alt={article.author}
+                                            fill
+                                            className="object-cover"
                                             unoptimized
                                         />
                                     </div>
-                                    <div className="flex flex-col">
-                                        <span className="text-xs font-bold uppercase tracking-widest text-black/60 mb-2">
-                                            {article.category}
-                                        </span>
-                                        <h4 className="text-xl md:text-2xl font-black leading-tight tracking-tight group-hover:underline decoration-2 underline-offset-2">
-                                            {article.title}
-                                        </h4>
-                                    </div>
-                                </a>
-                            ))}
-                        </div>
-
-                        {/* Newsletter Signup */}
-                        <div className="bg-[#b4f3df] rounded-[32px] p-8 md:p-12 flex flex-col justify-center h-full">
-                            <h3 className="text-3xl font-black uppercase tracking-tighter mb-4">
-                                Subscribe to<br />The Brief
+                                    <span className="text-xs font-bold text-[#111212]">{article.author}</span>
+                                </div>
+                                <div className="bg-white rounded-full px-3 py-1.5 flex items-center gap-1.5 shadow-sm shrink-0 text-[#111212]/70">
+                                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                                        <circle cx="12" cy="12" r="10"></circle>
+                                        <polyline points="12 6 12 12 16 14"></polyline>
+                                    </svg>
+                                    <span className="text-xs font-bold">{article.readTime}</span>
+                                </div>
+                            </div>
+                            
+                            {/* Title */}
+                            <h3 className="text-[clamp(1.5rem,2.2vw,2rem)] font-medium leading-[1.1] tracking-tight group-hover:opacity-70 transition-opacity">
+                                {article.title}
                             </h3>
-                            <p className="font-bold text-black/80 mb-8">
-                                Weekly insights on search, social, and how to build category leaders.
-                            </p>
-                            <form className="flex flex-col gap-4" onSubmit={(e) => e.preventDefault()}>
-                                <input 
-                                    type="email" 
-                                    placeholder="Your email address" 
-                                    className="w-full bg-transparent border-b-2 border-black py-3 text-lg font-bold placeholder:text-black/40 focus:outline-none"
-                                />
-                                <button type="submit" className="self-start mt-4 bg-black text-white px-8 py-3 rounded-full font-bold transition-transform hover:scale-105">
-                                    Subscribe →
-                                </button>
-                            </form>
-                        </div>
-                    </div>
-
+                        </a>
+                    ))}
                 </div>
             </div>
         </section>
     )
 }
+

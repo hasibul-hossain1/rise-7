@@ -2,36 +2,54 @@
 
 import { useEffect, useRef } from 'react'
 import gsap from 'gsap'
+import Image from 'next/image'
+import Link from 'next/link'
+import { ArrowUpRight } from 'lucide-react'
 
-const services = [
-    { id: '01', title: 'SEO', subtitle: 'Search Engine Optimisation' },
-    { id: '02', title: 'Digital PR', subtitle: 'Link Building & PR Campaigns' },
-    { id: '03', title: 'Social Media', subtitle: 'Organic & Paid Social' },
-    { id: '04', title: 'Content', subtitle: 'Creative & Strategy' },
-    { id: '05', title: 'Data & Analytics', subtitle: 'Measurement & Insights' }
+// Using hero-image as placeholder for the people working
+import iconImage from '@/assets/hero-image.webp'
+
+const serviceRows = [
+    ['Digital PR', 'Organic Social & Content'],
+    ['Search & Growth Strategy', 'Content Experience'],
+    ['Data & Insights', 'Onsite SEO']
 ]
 
 export default function Services() {
     const sectionRef = useRef<HTMLElement>(null)
-    const itemsRef = useRef<HTMLDivElement>(null)
+    const headerRef = useRef<HTMLDivElement>(null)
+    const rowsRef = useRef<HTMLDivElement>(null)
+
+    const morphCta = (e: React.PointerEvent<HTMLAnchorElement> | React.FocusEvent<HTMLAnchorElement>, isActive: boolean) => {
+        const cta = e.currentTarget
+        const pillRadius = window.matchMedia('(min-width: 640px)').matches ? 24 : 22
+        gsap.to(cta, {
+            borderRadius: isActive ? 12 : pillRadius,
+            duration: 0.72,
+            ease: 'power4.out',
+            overwrite: 'auto',
+        })
+    }
 
     useEffect(() => {
         const section = sectionRef.current
-        const itemsContainer = itemsRef.current
+        const header = headerRef.current
+        const rows = rowsRef.current
 
-        if (!section || !itemsContainer) return
+        if (!section || !header || !rows) return
 
         const ctx = gsap.context(() => {
-            gsap.from(itemsContainer.children, {
+            // Animate header and elements
+            gsap.from([header, ...rows.children], {
                 scrollTrigger: {
                     trigger: section,
-                    start: 'top 75%',
+                    start: 'top 80%',
                 },
-                autoAlpha: 0,
-                y: 50,
+                y: 40,
+                opacity: 0,
                 duration: 1,
-                stagger: 0.15,
-                ease: 'expo.out'
+                stagger: 0.1,
+                ease: 'power3.out'
             })
         }, section)
 
@@ -39,44 +57,113 @@ export default function Services() {
     }, [])
 
     return (
-        <section ref={sectionRef} className="bg-[#e7e6e0] text-[#111212] py-32 rounded-t-[40px] relative z-30 -mt-10">
+        <section ref={sectionRef} className="bg-[#e7e6e0] text-[#111212] py-16 md:py-24 rounded-t-[40px] relative z-30 -mt-10">
             <div className="mx-auto max-w-[1880px] px-5 sm:px-8 lg:px-12">
-                <div className="flex flex-col md:flex-row gap-12 justify-between items-start mb-24">
-                    <h2 className="text-[clamp(3.5rem,6vw,6rem)] font-black leading-[0.85] tracking-tighter uppercase">
-                        Our Core <br />Services
-                    </h2>
-                    <p className="max-w-md text-lg md:text-xl font-bold leading-tight">
-                        We build category leaders using a unique blend of organic marketing services designed to dominate search engines and social feeds.
-                    </p>
+                
+                {/* Top centered button */}
+                <div className="flex justify-center mb-16 md:mb-24">
+                    <Link
+                        href="/work"
+                        onBlur={(e) => morphCta(e, false)}
+                        onFocus={(e) => morphCta(e, true)}
+                        onPointerEnter={(e) => morphCta(e, true)}
+                        onPointerLeave={(e) => morphCta(e, false)}
+                        className="group inline-flex h-11 sm:h-12 shrink-0 items-center justify-center gap-2 overflow-hidden rounded-[22px] sm:rounded-[24px] bg-white px-5 sm:px-7 text-sm font-bold text-[#111212] [transform:translateZ(0)] [will-change:border-radius] shadow-sm"
+                    >
+                        <span className="relative inline-block h-[1.1em] overflow-hidden whitespace-nowrap leading-none">
+                            <span className="flex flex-col transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:-translate-y-1/2">
+                                <span className="flex items-center gap-2">
+                                    <span>Explore Our Work</span>
+                                    <ArrowUpRight size={16} />
+                                </span>
+                                <span className="flex items-center gap-2">
+                                    <span>Explore Our Work</span>
+                                    <ArrowUpRight size={16} />
+                                </span>
+                            </span>
+                        </span>
+                    </Link>
                 </div>
 
-                <div ref={itemsRef} className="flex flex-col border-t-2 border-black/10">
-                    {services.map((service) => (
-                        <a 
-                            key={service.id} 
-                            href={`/services/${service.title.toLowerCase().replace(/ /g, '-')}`}
-                            className="group flex flex-col md:flex-row md:items-center justify-between py-10 md:py-16 border-b-2 border-black/10 hover:border-black transition-colors duration-300"
+                {/* Header Row */}
+                <div ref={headerRef} className="flex flex-col lg:flex-row justify-between items-start lg:items-end mb-8 border-b border-black/10 pb-12 gap-8 lg:gap-0">
+                    <h2 className="text-[clamp(4rem,9vw,9.5rem)] font-medium leading-[0.85] tracking-tighter flex items-center flex-wrap">
+                        Our 
+                        <span className="w-[80px] h-[80px] md:w-[130px] md:h-[130px] rounded-[32px] overflow-hidden relative shrink-0 mx-3 md:mx-5 inline-block align-middle transform translate-y-[-5%] shadow-lg">
+                            <Image 
+                                src={iconImage} 
+                                alt="Services" 
+                                fill 
+                                className="object-cover" 
+                                sizes="(max-width: 768px) 80px, 130px"
+                            />
+                        </span>
+                        Services
+                    </h2>
+                    
+                    <div className="shrink-0 lg:mb-4">
+                        <Link
+                            href="/services"
+                            onBlur={(e) => morphCta(e, false)}
+                            onFocus={(e) => morphCta(e, true)}
+                            onPointerEnter={(e) => morphCta(e, true)}
+                            onPointerLeave={(e) => morphCta(e, false)}
+                            className="group inline-flex h-11 sm:h-12 shrink-0 items-center justify-center gap-2 overflow-hidden rounded-[22px] sm:rounded-[24px] bg-white px-5 sm:px-7 text-sm font-bold text-[#111212] [transform:translateZ(0)] [will-change:border-radius] shadow-sm"
                         >
-                            <div className="flex items-start gap-8">
-                                <span className="text-xl md:text-2xl font-bold text-black/40 mt-3">{service.id}</span>
-                                <div>
-                                    <h3 className="text-[clamp(3.5rem,7vw,7.5rem)] font-black leading-[0.85] tracking-tighter uppercase group-hover:translate-x-6 transition-transform duration-700 ease-[cubic-bezier(0.19,1,0.22,1)] will-change-transform">
-                                        {service.title}
-                                    </h3>
-                                    <p className="mt-4 text-lg md:text-2xl font-bold text-black/60 group-hover:translate-x-6 transition-transform duration-700 delay-75 ease-[cubic-bezier(0.19,1,0.22,1)] will-change-transform">
-                                        {service.subtitle}
-                                    </p>
+                            <span className="relative inline-block h-[1.1em] overflow-hidden whitespace-nowrap leading-none">
+                                <span className="flex flex-col transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:-translate-y-1/2">
+                                    <span className="flex items-center gap-2">
+                                        <span>View All Services</span>
+                                        <ArrowUpRight size={16} />
+                                    </span>
+                                    <span className="flex items-center gap-2">
+                                        <span>View All Services</span>
+                                        <ArrowUpRight size={16} />
+                                    </span>
+                                </span>
+                            </span>
+                        </Link>
+                    </div>
+                </div>
+
+                {/* Services Grid List */}
+                <div ref={rowsRef} className="flex flex-col">
+                    {serviceRows.map((row, i) => (
+                        <div key={i} className="flex flex-col md:flex-row border-b border-black/10 py-6 md:py-10 gap-4 md:gap-8">
+                            {row.map((service, j) => (
+                                <div key={j} className="w-full md:w-1/2 flex items-center">
+                                    <div className="group relative inline-flex items-center px-4 md:px-6 py-2 md:py-3 -ml-4 md:-ml-6 cursor-pointer rounded-full transition-all duration-500">
+                                        
+                                        {/* Hover Background Image */}
+                                        <div className="absolute inset-0 opacity-0 scale-[0.98] group-hover:scale-100 group-hover:opacity-100 transition-all duration-500 ease-out z-0 rounded-full overflow-hidden pointer-events-none">
+                                            <Image 
+                                                src={iconImage} 
+                                                alt={service} 
+                                                fill 
+                                                className="object-cover transition-transform duration-700 group-hover:scale-105" 
+                                            />
+                                            <div className="absolute inset-0 bg-black/40 mix-blend-multiply"></div>
+                                        </div>
+
+                                        {/* Content */}
+                                        <div className="relative z-10 flex items-center text-[#111212] group-hover:text-white transition-colors duration-500">
+                                            {/* Arrow Container */}
+                                            <div className="overflow-hidden flex items-center justify-start transition-all duration-500 ease-out w-0 opacity-0 -translate-x-4 group-hover:w-10 md:group-hover:w-14 group-hover:opacity-100 group-hover:translate-x-0">
+                                                <ArrowUpRight strokeWidth={2.5} className="w-8 h-8 md:w-10 md:h-10 shrink-0" />
+                                            </div>
+                                            
+                                            {/* Text */}
+                                            <h3 className="text-[clamp(1.8rem,3.5vw,3.5rem)] font-medium tracking-tight whitespace-nowrap">
+                                                {service}
+                                            </h3>
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
-                            
-                            <div className="mt-8 md:mt-0 opacity-0 -translate-x-12 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-700 ease-[cubic-bezier(0.19,1,0.22,1)] hidden md:block will-change-transform">
-                                <div className="w-20 h-20 rounded-full bg-black flex items-center justify-center">
-                                    <span className="text-white text-3xl">→</span>
-                                </div>
-                            </div>
-                        </a>
+                            ))}
+                        </div>
                     ))}
                 </div>
+
             </div>
         </section>
     )
